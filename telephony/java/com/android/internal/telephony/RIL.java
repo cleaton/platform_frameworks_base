@@ -196,7 +196,7 @@ class RILRequest {
  *
  * {@hide}
  */
-public class RIL extends BaseCommands implements CommandsInterface {
+public final class RIL extends BaseCommands implements CommandsInterface {
     static final String LOG_TAG = "RILJ";
     static final boolean RILJ_LOGD = true;
     static final boolean RILJ_LOGV = false; // STOP SHIP if true
