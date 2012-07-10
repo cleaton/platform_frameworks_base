@@ -2289,21 +2289,6 @@ public final class Settings {
         @Deprecated
         public static final String WIFI_WATCHDOG_PING_TIMEOUT_MS =
             Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS;
-
-        /**
-         * Settings button in drop down. Boolean value. 
-         * 0 = defualt, click for settings, longpress for toggles.
-         * 1 = click for toggles, long press for settings.
-         * @hide
-         */
-        public static final String STATUSBAR_SETTINGS_BEHAVIOR = "statusbar_settings_behavior";
-
-        /**
-         * whether to auto-hide the toggles when the statusbar collapes. Boolean value.
-         * @hide
-         */
-        public static final String STATUSBAR_QUICKTOGGLES_AUTOHIDE = "statusbar_quicktoggles_autohide";
-
     }
 
     /**

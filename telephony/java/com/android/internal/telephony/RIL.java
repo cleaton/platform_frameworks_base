@@ -235,6 +235,9 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
     Object     mLastNITZTimeInfo;
 
+    // When we are testing emergency calls
+    AtomicBoolean mTestingEmergencyCall = new AtomicBoolean(false);
+
     //***** Events
 
     static final int EVENT_SEND                 = 1;
@@ -2319,6 +2322,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             case RIL_REQUEST_ISIM_AUTHENTICATION: ret =  responseString(p); break;
             case RIL_REQUEST_ACKNOWLEDGE_INCOMING_GSM_SMS_WITH_PDU: ret = responseVoid(p); break;
             case RIL_REQUEST_STK_SEND_ENVELOPE_WITH_STATUS: ret = responseICC_IO(p); break;
+            case RIL_REQUEST_VOICE_RADIO_TECH: ret = responseInts(p); break;
             default:
                 throw new RuntimeException("Unrecognized solicited response: " + rr.mRequest);
             //break;
@@ -3022,7 +3026,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         return response;
     }
 
-    private Object
+    protected Object
     responseCallList(Parcel p) {
         int num;
         int voiceSettings;
@@ -3821,5 +3825,37 @@ public class RIL extends BaseCommands implements CommandsInterface {
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
         send(rr);
+    }
+
+    /* (non-Javadoc)
+     * @see com.android.internal.telephony.BaseCommands#testingEmergencyCall()
+     */
+    @Override
+    public void testingEmergencyCall() {
+        if (RILJ_LOGD) riljLog("testingEmergencyCall");
+        mTestingEmergencyCall.set(true);
+    }
+
+    public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+        pw.println("RIL:");
+        pw.println(" mSocket=" + mSocket);
+        pw.println(" mSenderThread=" + mSenderThread);
+        pw.println(" mSender=" + mSender);
+        pw.println(" mReceiverThread=" + mReceiverThread);
+        pw.println(" mReceiver=" + mReceiver);
+        pw.println(" mWakeLock=" + mWakeLock);
+        pw.println(" mWakeLockTimeout=" + mWakeLockTimeout);
+        synchronized (mRequestsList) {
+          pw.println(" mRequestMessagesPending=" + mRequestMessagesPending);
+          pw.println(" mRequestMessagesWaiting=" + mRequestMessagesWaiting);
+            int count = mRequestsList.size();
+            pw.println(" mRequestList count=" + count);
+            for (int i = 0; i < count; i++) {
+                RILRequest rr = mRequestsList.get(i);
+                pw.println("  [" + rr.mSerial + "] " + requestToString(rr.mRequest));
+            }
+        }
+        pw.println(" mLastNITZTimeInfo=" + mLastNITZTimeInfo);
+        pw.println(" mTestingEmergencyCall=" + mTestingEmergencyCall.get());
     }
 }
