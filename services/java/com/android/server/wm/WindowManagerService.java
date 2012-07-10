@@ -612,7 +612,7 @@ public class WindowManagerService extends IWindowManager.Stub
 
     final InputManagerService mInputManager;
 
-	private boolean mForceDisableHardwareKeyboard =	false;
+    private boolean mForceDisableHardwareKeyboard = true;
 
     // Who is holding the screen on.
     Session mHoldingScreenOn;
@@ -913,9 +913,6 @@ public class WindowManagerService extends IWindowManager.Stub
 
         mInputManager = new InputManagerService(context, mInputMonitor);
         mAnimator = new WindowAnimator(this, context, mPolicy);
-
-		mForceDisableHardwareKeyboard = context.getResources().getBoolean(
-				com.android.internal.R.bool.config_forceDisableHardwareKeyboard);
 
         PolicyThread thr = new PolicyThread(mPolicy, this, context, pm);
         thr.start();
